@@ -2,12 +2,35 @@
 <html>
     <head>
 	<title>Game of Life</title>
+	<link href="../../assets/themes/bootstrap-3/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     </head>
     <body>
-	<canvas id = "canvas"></canvas>
-	<button id = "update">UPDATE</button>
-	<button id = "play">AUTO PLAY</button>
-	<button id = "restart">RESTART</button>
+	<div class = "container">
+	    <div class = "row">
+		<div class = "btn-group">
+		    <button class = "btn btn-default" id = "update">UPDATE</button>
+		    <button class = "btn btn-default" id = "play">AUTO PLAY</button>
+		    <button class = "btn btn-default" id = "restart">RESTART</button>
+		</div>
+	    </div>
+	    <div class  = "row">
+		<canvas id = "canvas"></canvas>
+	    </div>
+	    <div class = "row">
+		<form>
+		    <div class = "form-group">
+			<label for = "numOfRow">Number of Rows</label>
+			<input type = "number" name = "row" class = "form-control" id = "numOfRow" placeholder = "40">
+		    </div>
+		    <div class = "form-group">
+			<label for = "numOfCol">Number of Columns</label>
+			<input type = "number" name = "col" class = "form-control" id = "numOfCol" placeholder = "40">
+		    </div>
+		    <button id = "grid_size" type = "submit" class = "btn btn-primary">Submit</button>
+		</form>
+	    </div>
+	</div>
 	<script src = "js/vendors/jquery-1.11.3.min.js"></script>
 	<script src = "js/script.js" canvas = "canvas" charset = "utf-8"></script>
     </body>

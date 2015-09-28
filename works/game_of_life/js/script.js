@@ -1,13 +1,7 @@
 //grid width and height
 var bw = 400;
 var bh = 400;
-//padding around grid
-var p = 10;
 //size of canvas
-/*
-var cw = bw + (p*2) + 1;
-var ch = bh + (p*2) + 1;
-*/
 
 var column = 40;
 var row = 40;
@@ -17,27 +11,13 @@ var heightOfCell = bh / row;
 
 var arraySize = column * row;
 
-var canvas = $('<canvas/>').attr({width: bw, height: bh}).appendTo('body');
+// var canvas = $('<canvas/>').attr({width: bw, height: bh}).appendTo('body');
+
+var canvas = $('#canvas');
+
+canvas.attr({width: bw, height: bh});
 
 var context = canvas.get(0).getContext("2d");
-
-/*
-function drawBoard(){
-    for (var x = 0; x <= bw; x += 40) {
-        context.moveTo(0.5 + x + p, p);
-        context.lineTo(0.5 + x + p, bh + p);
-    }
-
-
-    for (var x = 0; x <= bh; x += 40) {
-        context.moveTo(p, 0.5 + x + p);
-        context.lineTo(bw + p, 0.5 + x + p);
-    }
-
-    context.strokeStyle = "black";
-    context.stroke();
-}
-*/
 
 var array = [];
 var auxArray = [];
@@ -45,6 +25,12 @@ var auxArray = [];
 
 function InitGrid(){
 	clearInterval(auto);
+
+	widthOfCell = bw / column;
+	heightOfCell = bh / row;
+
+	arraySize = column * row;
+
 	for(var i = 0; i < arraySize; i++){
 		array[i] = Math.floor(Math.random() * 2);
 	}
@@ -62,6 +48,13 @@ function InitGrid(){
 	$('button#update').click(update);
 	$('button#play').click(Play);
 	$('button#restart').click(InitGrid);
+	$('form').submit(function(e){
+	    clearInterval(auto);
+	    e.preventDefault();
+	    column = $('input[name=col]').val() || 40;
+	    row = $('input[name=row]').val() || 40;
+	    InitGrid();
+	});
 })();
 
 /*
@@ -112,7 +105,7 @@ function drawGrid(){
 		for(var j = 0;j < column; j++){
 			if(array[row*i + j]){
 				context.fillStyle = 'green';
-				console.log(i, j, array[row*i+j]);
+				// console.log(i, j, array[row*i+j]);
 				context.fillRect(widthOfCell*j, heightOfCell*i, widthOfCell, heightOfCell);	
 			}
 			else{
