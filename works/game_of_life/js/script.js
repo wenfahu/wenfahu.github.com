@@ -9,7 +9,7 @@ var row = 40;
 var widthOfCell = bw / column;
 var heightOfCell = bh / row;
 
-var arraySize = column * row;
+// var arraySize = column * row;
 
 // var canvas = $('<canvas/>').attr({width: bw, height: bh}).appendTo('body');
 
@@ -20,8 +20,6 @@ canvas.attr({width: bw, height: bh});
 var context = canvas.get(0).getContext("2d");
 
 var array = [];
-var auxArray = [];
-
 
 function InitGrid(){
 	clearInterval(auto);
@@ -29,14 +27,13 @@ function InitGrid(){
 	widthOfCell = bw / column;
 	heightOfCell = bh / row;
 
-	arraySize = column * row;
+	// arraySize = column * row;
 
-	for(var i = 0; i < arraySize; i++){
-		array[i] = Math.floor(Math.random() * 2);
-	}
-
-	for(var i = 0; i < arraySize; i++){
-		auxArray[i] = 0;
+	for(var i = 0; i < row; i++){
+	    array[i] = [];
+	    for(var j = 0; j < column; j++){
+		array[i][j] = Math.floor(Math.random() * 2);
+	    }
 	}
 
 	drawGrid();
@@ -65,54 +62,61 @@ function Play(){
 var auto;
 
 function Play(){
-	auto = setInterval(update, 1000);
+	auto = setInterval(update, 100);
 }
 
 
 function update(){
-	for(var i = 0; i < arraySize; i++){
-		var left_top = (array[i-row-1] === undefined) ? 0 : array[i-row-1];
-		var top = (array[i-row] === undefined) ? 0 : array[i-row];
-		var right_top = (array[i-row+1] === undefined) ? 0 : array[i-row+1];
-		var left = (array[i-1] === undefined) ? 0 : array[i-1];
-		var right = (array[i+1] === undefined) ? 0 : array[i+1];
-		var left_bottom = (array[i+row-1] === undefined) ? 0 : array[i+row-1];
-		var bottom = (array[i+row] === undefined) ? 0 : array[i+10];
-		var right_bottom = (array[i+row+1] === undefined) ? 0 : array[i+row+1];
-
-		var sum = left_top + top + left_bottom + left + right + bottom + right_bottom + right_top;
-
-		auxArray[i] = sum;
+    var res = [];
+    function neighborCount(x, y){
+	var count = 0;
+	function isAlive(x, y){
+	    return array[x] && array[x][y];
 	}
+	if(isAlive(x-1, y-1)) count++;
+	if(isAlive(x, y-1)) count++;
+	if(isAlive(x+1, y-1)) count++;
+	if(isAlive(x-1, y)) count++;
+	if(isAlive(x+1, y)) count++;
+	if(isAlive(x-1, y+1)) count++;
+	if(isAlive(x, y+1)) count++;
+	if(isAlive(x+1, y+1)) count++;
 
-	for(var i = 0; i < arraySize; i++){
-		if(auxArray[i] == 3){
-			array[i] = 1;
-		}
-		else if(auxArray == 2){
-			//
-		}
-		else{
-			array[i] = 0;
-		}
-	}
+	return count;
+    }
 
-	drawGrid();
+    array.map(function(row, x){
+	res[x] = [];
+	row.map(function(item, y){
+	    var alive = 0, neighbors = neighborCount(x, y);
+	    if(item > 0){
+		aive = neighbors === 2 || neighbors === 3 ? 1 : 0;
+	    } else {
+		alive = neighbors === 3 ? 1 : 0;
+	    }
+	    res[x][y] = alive;
+	})
+    });
+
+    array = res;
+
+    drawGrid();
 }
 
 function drawGrid(){
-	for(var i = 0; i < row; i++){
-		for(var j = 0;j < column; j++){
-			if(array[row*i + j]){
-				context.fillStyle = 'green';
-				// console.log(i, j, array[row*i+j]);
-				context.fillRect(widthOfCell*j, heightOfCell*i, widthOfCell, heightOfCell);	
-			}
-			else{
-				context.fillStyle = 'white';
-				context.fillRect(widthOfCell*j, heightOfCell*i, widthOfCell, heightOfCell);
-			}
-		}
-	}
+    context.clearRect(0, 0, 400, 400);
+    for(var i = 0; i < row; i++){
+	    for(var j = 0;j < column; j++){
+		    if(array[i][j]){
+			    context.fillStyle = 'green';
+			    // console.log(i, j, array[row*i+j]);
+			    context.fillRect(widthOfCell*j, heightOfCell*i, widthOfCell, heightOfCell);	
+		    }
+		    else{
+			    context.fillStyle = 'white';
+			    context.fillRect(widthOfCell*j, heightOfCell*i, widthOfCell, heightOfCell);
+		    }
+	    }
+    }
 }
 
